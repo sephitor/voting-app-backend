@@ -1,7 +1,9 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+const http = require('http');
 const bodyParser = require('body-parser');
+const socketIO = require('socket.io');
 const path = require('path')
 const color = require('colors');
 var cors = require('cors')
@@ -9,6 +11,8 @@ var cors = require('cors')
 require('dotenv').config();
 
 const app = express();
+
+let server = http.createServer(app);
 
 app.use(cors())
 // parse application/x-www-form-urlencoded
@@ -33,6 +37,9 @@ mongoose.connect(process.env.URL_DB, {
 
 });
 
-app.listen(process.env.PORT, () => {
+module.exports.io = socketIO(server);
+require('./sockets/socket');
+
+server.listen(process.env.PORT, () => {
     console.log("Escuchando en ", process.env.PORT);
 });
