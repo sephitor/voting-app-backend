@@ -10,6 +10,9 @@ var cors = require('cors')
 
 require('dotenv').config();
 
+const PORT = process.env.PORT || 4000;
+const URLBD = process.env.URL_DB || 'mongodb://localhost:27017/votingdojo';
+
 const app = express();
 
 let server = http.createServer(app);
@@ -24,7 +27,7 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 
 app.use('/api',require('./controller'));
 
-mongoose.connect(process.env.URL_DB, {
+mongoose.connect(URLBD, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -40,6 +43,6 @@ mongoose.connect(process.env.URL_DB, {
 module.exports.io = socketIO(server);
 require('./sockets/socket');
 
-server.listen(process.env.PORT, () => {
-    console.log("Escuchando en ", process.env.PORT);
+server.listen(PORT, () => {
+    console.log("Escuchando en ", PORT);
 });
